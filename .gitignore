@@ -3,8 +3,6 @@
 *.pyc
 *.media
 *.env
-*.txt
-.txt
 __pycache__
 amarket/__pycache__/
 *.db
