@@ -47,6 +47,10 @@ INSTALLED_APPS = [
     
 ]
 
+INSTALLED_APPS += [
+    'rest_framework_simplejwt.token_blacklist'
+    ]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
