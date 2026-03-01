@@ -15,7 +15,6 @@ from batches.tasks import process_batch
 class BatchAPI(ViewSet):
     permission_classes = [IsAuthenticated]
 
-    # GET /batch-runs
     def listing(self, request):
         if request.user.role not in ["ADMIN", "REVIEWER"]:
             return Response({"message": "Forbidden"}, status=403)
@@ -37,7 +36,6 @@ class BatchAPI(ViewSet):
             "total": paginator.count
         })
 
-    # POST /batch-runs/trigger
     def trigger(self, request):
         if request.user.role != "ADMIN":
             return Response({"message": "Forbidden"}, status=403)
