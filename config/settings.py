@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'users',
     "candidates",
     "batches",
+    "reports",
     
 ]
 
@@ -169,3 +170,19 @@ SIMPLE_JWT = {
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    "run-batch-every-2-hours": {
+        "task": "batches.tasks.process_batch",
+        "schedule": crontab(minute=0, hour="*/2"),
+    },
+}
+
+# CELERY_BEAT_SCHEDULE = {
+#     "run-batch-every-minute": {
+#         "task": "batches.tasks.process_batch",
+#         "schedule": crontab(minute="*/1"),
+#     },
+# }
