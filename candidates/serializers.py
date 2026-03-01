@@ -32,6 +32,9 @@ class CandidateSerializer(serializers.ModelSerializer):
         except Exception:
             raise serializers.ValidationError("Invalid phone number format")
 
+    def validate_email(self, value):
+        return value.lower()
+
 class CandidateSearchSerializer(serializers.ModelSerializer):
 
     currentStatus = serializers.CharField(source="status")
