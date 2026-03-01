@@ -113,7 +113,24 @@ Note: `--pool=solo` is required on Windows.
 celery -A config beat --loglevel=info
 ```
 
-## Authentication APIs
+
+### Project Structre Overview
+```
+project_root/
+│
+├── users/        → Authentication logic
+├── candidates/   → Candidate data handling
+├── batches/      → Background job processing & BatchRun & CandidateAttempt Models
+├── reports/      → Reporting & analytics 
+├── core/         → Health & shared utilities
+└── config/       → Project configuration
+```
+## Authentication APIs – users App
+
+Handles user authentication and token management.
+
+Base Path: /auth/
+
 
 - Seeded Admin User
 ```
@@ -141,8 +158,15 @@ POST
 POST
 [http://127.0.0.1:8000/auth/logout/](http://127.0.0.1:8000/auth/logout/)
 
-## Candidate APIs
+Purpose:
 
+* Accept and validate candidate form data
+* Store candidate records
+* Advanced filtering and search
+* Pagination and sorting support
+
+## Candidate APIs – candidates App
+Handles candidate data ingestion and search functionality.
 ### Create Candidate
 
 POST
@@ -171,7 +195,15 @@ Example:
 /candidates/search?q=alice&status=FAILED&page=1&pageSize=10
 ```
 
-## Batch Processing APIs
+Purpose:
+
+* Accept and validate candidate form data
+* Store candidate records
+* Advanced filtering and search
+* Pagination and sorting support
+
+## Batch Processing APIs – batches App
+Handles background job processing and batch execution monitoring.
 
 ### List Batch Runs
 
@@ -183,7 +215,15 @@ GET
 POST
 [http://127.0.0.1:8000/batch-runs/trigger/](http://127.0.0.1:8000/batch-runs/trigger/)
 
-## Reporting APIs
+Purpose:
+
+* Scheduled batch execution (via Celery)
+* Manual batch trigger (ADMIN only)
+* Batch execution history tracking
+* Operational monitoring
+
+## Reporting & Analytics APIs – reports App
+Provides system metrics and operational insights.
 
 ### Status Metrics
 
@@ -218,10 +258,25 @@ Example:
 /reports/stuck-candidates/?minAttempts=1&hoursFailed=0
 ```
 
+Purpose:
+* Processing statistics
+* Success & failure metrics
+* Retry distribution
+* Grouped analytics (day/week)
+* Domain-level analytics
+* Detection of stuck records
+
 ## Health Endpoint
+Provides basic system health check.
 
 GET
 [http://127.0.0.1:8000/health/](http://127.0.0.1:8000/health/)
+
+Purpose:
+* API availability check
+* Monitoring system integration
+
+
 
 ## Batch Processing Logic
 
