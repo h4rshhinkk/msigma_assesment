@@ -1,7 +1,7 @@
 import phonenumbers
 from rest_framework import serializers
 from .models import Candidate
-
+from batches.models import CandidateAttempt
 class CandidateSerializer(serializers.ModelSerializer):
 
     dob = serializers.DateField(
@@ -31,3 +31,27 @@ class CandidateSerializer(serializers.ModelSerializer):
 
         except Exception:
             raise serializers.ValidationError("Invalid phone number format")
+
+class CandidateSearchSerializer(serializers.ModelSerializer):
+
+    currentStatus = serializers.CharField(source="status")
+    attemptCount = serializers.IntegerField(source="attempt_count")
+    lastAttemptAt = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Candidate
+        fields = [
+            "id",
+            "name",
+            "email",
+            "currentStatus",
+            "attemptCount",
+            "lastAttemptAt",
+        ]
+
+    def get_lastAttemptAt(self, obj):
+        last_attempt = CandidateAttempt.objects.filter(
+            candidate=obj
+        ).order_by("-created_at").first()
+
+        return last_attempt.created_at if last_attempt else None
